@@ -2,7 +2,10 @@ import flask
 from dotenv import load_dotenv
 from mongo import MongoClient
 import json
+import os
+load_dotenv()
 
+host = os.getenv('HOST')
 
 db = MongoClient()
 
@@ -18,5 +21,9 @@ def get_history():
 def get_latest():
     latest = db.find(query={}, coll='amounts')[0]
     return flask.jsonify(latest)
+
+if host:
+    app.run(host='0.0.0.0')
+else:
+    app.run()
     
-app.run()
