@@ -1,0 +1,1 @@
+docker run -d -p 7000:5000 --name insta-stats jarnobog/insta-stats-api
