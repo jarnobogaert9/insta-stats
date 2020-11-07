@@ -4,36 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>History Of Followers</title>
 </head>
 
 <body>
-    <h1>Hello World!</h1>
-    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <canvas id="myCanvas" width="250" height="100"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script>
         async function getData() {
             const res = await fetch('https://insta.jarnobogaert.xyz/followers-history');
             const json = await res.json();
-            console.log(json);
+            return json
         }
 
-        function renderChart() {
-            new Chart(document.getElementById("myCanvas"), {
+        function renderChart({labels, data}) {
+            let chart = new Chart(document.getElementById("myCanvas"), {
                 type: 'line',
                 data: {
-                    labels: mon_unique,
+                    labels: labels,
                     datasets: [{
-                        data: ab_val,
-                        label: "Alberta",
-                        borderColor: "#3e95cd",
-                        fill: false
+                        label: 'amount',
+                        data: data,
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        borderColor: '#8c03fc',
+                        pointHitRadius: '3',
+                        pointRadius: '4',
                     }]
                 },
                 options: {
                     title: {
                         display: true,
-                        text: 'Positive Cases of COVID in provinces of Canada'
+                        text: 'History of followers'
                     },
                     hover: {
                         mode: 'index',
@@ -43,7 +44,28 @@
             });
         }
 
-        getData()
+        function formatData(rawData) {
+            // Get all dates from data
+            const labels = rawData.map(obj => obj.createdAt)
+
+            // Get formated objects
+            const data = rawData.map(obj => {
+                return {t: obj.createdAt, y: obj.amountOfFollowers}
+            })
+
+            
+
+            return {
+                labels,
+                data: data.reverse()
+            }
+        }
+
+        (async () => {
+            const rawData = await getData()
+            const {labels, data} = formatData(rawData);
+            renderChart({labels, data})
+        })()
     </script>
 </body>
 
