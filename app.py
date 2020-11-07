@@ -10,7 +10,8 @@ host = os.getenv('HOST')
 db = MongoClient()
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+if not host:
+    app.config["DEBUG"] = True
 
 @app.route('/followers-history', methods=['GET'])
 def get_history():
@@ -26,4 +27,3 @@ if host:
     app.run(host='0.0.0.0')
 else:
     app.run()
-    
