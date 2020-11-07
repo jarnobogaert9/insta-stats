@@ -37,6 +37,7 @@ RUN apt-get install -y python-pip python-dev build-essential
 # We copy just the requirements.txt first to leverage Docker cache
 COPY . /app
 WORKDIR /app
+RUN python -m pip install --upgrade setuptools pip wheel
 RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 ENTRYPOINT [ "python" ]
