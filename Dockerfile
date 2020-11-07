@@ -29,18 +29,32 @@
 # CMD ["python3","app.py"]
 
 # 3
-FROM ubuntu:16.04
+# FROM ubuntu:16.04
 
-RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
+# RUN apt-get update -y
+# RUN apt-get install -y python-pip python-dev build-essential
 
-# We copy just the requirements.txt first to leverage Docker cache
+# # We copy just the requirements.txt first to leverage Docker cache
+# COPY . /app
+# WORKDIR /app
+# RUN pip install --upgrade pip
+# # RUN python -m pip install --upgrade setuptools pip wheel
+# RUN pip install --upgrade setuptools
+# RUN pip install -r requirements.txt
+# ENTRYPOINT [ "python" ]
+
+# CMD [ "app.py" ]
+
+# Version ptython3
+FROM ubuntu:18.10
+
+RUN apt-get update
+RUN apt-get install -y python3 python3-dev python3-pip nginx
+RUN pip3 install uwsgi
+
 COPY . /app
 WORKDIR /app
-RUN pip install --upgrade pip
-# RUN python -m pip install --upgrade setuptools pip wheel
-RUN pip install --upgrade setuptools
-RUN pip install -r requirements.txt
-ENTRYPOINT [ "python" ]
 
-CMD [ "app.py" ]
+RUN pip3 install -r requirements.txt
+
+CMD ["python3","app.py"]
