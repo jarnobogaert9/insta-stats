@@ -20,6 +20,8 @@ class MongoClient():
         db = self.db()
         c = db[coll]
         cursor = c.find(query)
-        elements = [{item: x[item] for item in x if item != '_id'} for x in cursor]
+        
+        elements = [{prop: str(row[prop]) if prop == '_id' else row[prop] for prop in row} for row in cursor]
+        
         elements.reverse()
         return elements
