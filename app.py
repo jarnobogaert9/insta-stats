@@ -18,5 +18,5 @@ def get_history():
 def get_latest():
     latest = db.find(query={}, coll='amounts')[0]
     return flask.jsonify(latest)
-
+    
 app.run()
