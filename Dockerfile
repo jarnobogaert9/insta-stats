@@ -24,6 +24,6 @@ FROM python:alpine3.7
 # FROM python:3.6.1-alpine
 WORKDIR /app
 COPY . /app
-RUN python -m pip install --upgrade setuptools pip
+RUN python -m pip install --upgrade setuptools pip wheel
 RUN pip install -r requirements.txt
 CMD ["python","app.py"]
