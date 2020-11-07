@@ -1,3 +1,5 @@
+from flask import render_template
+from flask_cors import CORS
 import flask
 from dotenv import load_dotenv
 from mongo import MongoClient
@@ -10,8 +12,14 @@ host = os.getenv('HOST')
 db = MongoClient()
 
 app = flask.Flask(__name__)
+CORS(app)
+
 if not host:
     app.config["DEBUG"] = True
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('stats.html')
 
 @app.route('/followers-history', methods=['GET'])
 def get_history():

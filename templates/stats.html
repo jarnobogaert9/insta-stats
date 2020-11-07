@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Hello World!</h1>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        async function getData() {
+            const res = await fetch('https://insta.jarnobogaert.xyz/followers-history');
+            const json = await res.json();
+            console.log(json);
+        }
+
+        function renderChart() {
+            new Chart(document.getElementById("myCanvas"), {
+                type: 'line',
+                data: {
+                    labels: mon_unique,
+                    datasets: [{
+                        data: ab_val,
+                        label: "Alberta",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Positive Cases of COVID in provinces of Canada'
+                    },
+                    hover: {
+                        mode: 'index',
+                        intersect: true
+                    },
+                }
+            });
+        }
+
+        getData()
+    </script>
+</body>
+
+</html>
