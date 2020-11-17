@@ -35,6 +35,22 @@
             display: none;
         }
 
+        .btn {
+            border: none;
+            padding: 0.5em 1.5em;
+            border-radius: 5px;
+            font-size: inherit;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+            background-color: rgb(197, 197, 197);
+        }
+
+        .btn:focus {
+            outline:0;
+        }
+
         .spinner {
             border: 10px solid #f3f3f3;
             border-radius: 50%;
@@ -78,8 +94,8 @@
         <div class="container center-text">
             <h2>Jarno Codes</h2>
             <h1>Follower count: <span id="count"></span></h1>
-            <button id="allBtn">All</button>
-            <button id="dailyBtn">Daily</button>
+            <button class="btn" id="allBtn">Hourly</button>
+            <button class="btn" id="dailyBtn">Daily</button>
         </div>
         <canvas id="myCanvas" width="250" height="100"></canvas>
     </div>
