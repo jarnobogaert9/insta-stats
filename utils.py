@@ -33,7 +33,7 @@ def filter_records(data, type):
                 "amountOfFollowers": sum_avg,
                 "createdAt": key
             })
-        
+        new_list.reverse()
         return new_list
 
         
