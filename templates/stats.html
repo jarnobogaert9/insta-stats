@@ -78,6 +78,7 @@
         <div class="container center-text">
             <h2>Jarno Codes</h2>
             <h1>Follower count: <span id="count"></span></h1>
+            <button id="allBtn">All</button>
             <button id="dailyBtn">Daily</button>
         </div>
         <canvas id="myCanvas" width="250" height="100"></canvas>
@@ -85,6 +86,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script>
         window.onload = () => {
+            let chart = undefined;
             function showWrapper() {
                 let wrapper = document.querySelector('.wrapper');
                 wrapper.classList.remove('hide')
@@ -95,16 +97,29 @@
                 loader.classList.add('hide');
             }
 
-            async function showData(type) {
-                const rawData = await getData(type)
+            async function showData({filter, update}) {
+                console.log(filter);
+                const rawData = await getData(filter)
                 const {
                     labels,
                     data
                 } = formatData(rawData);
-                renderChart({
-                    labels,
-                    data
-                });
+
+                if (!update) {
+                    renderChart({
+                        labels,
+                        data
+                    });
+                }
+                if (update) {
+                    // Update chart
+                    chart.data.labels = labels;
+                    chart.data.datasets.forEach(dataset => {
+                        dataset.data = data;
+                    })
+                    
+                    chart.update()
+                }
             }
 
             async function getData(filter = null) {
@@ -123,7 +138,7 @@
                 labels,
                 data
             }) {
-                let chart = new Chart(document.getElementById("myCanvas"), {
+                chart = new Chart(document.getElementById("myCanvas"), {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -167,34 +182,29 @@
                 }
             }
 
-            function renderCount({ amountOfFollowers }) {
+            function renderCount({
+                amountOfFollowers
+            }) {
                 const countSpan = document.getElementById('count');
                 countSpan.innerText = amountOfFollowers;
             }
 
             (async () => {
-                // const rawData = await getData()
-                // const {
-                //     labels,
-                //     data
-                // } = formatData(rawData);
-
-                showData()
                 const latest = await getLatestCountData();
-
-                // renderChart({
-                //     labels,
-                //     data
-                // });
+                
+                showData({filter: '', update: false})
                 renderCount(latest);
 
                 showWrapper();
                 hideLoader();
 
-
                 // Event listeners
                 document.getElementById('dailyBtn').addEventListener('click', () => {
-                    showData('daily')
+                    showData({filter: 'daily', update: true})
+                })
+
+                document.getElementById('allBtn').addEventListener('click', () => {
+                    showData({filter: '', update: true})
                 })
             })()
         }
