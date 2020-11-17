@@ -78,6 +78,7 @@
         <div class="container center-text">
             <h2>Jarno Codes</h2>
             <h1>Follower count: <span id="count"></span></h1>
+            <button id="dailyBtn">Daily</button>
         </div>
         <canvas id="myCanvas" width="250" height="100"></canvas>
     </div>
@@ -94,8 +95,20 @@
                 loader.classList.add('hide');
             }
 
-            async function getData() {
-                const res = await fetch('https://insta.jarnobogaert.xyz/followers-history');
+            async function showData(type) {
+                const rawData = await getData(type)
+                const {
+                    labels,
+                    data
+                } = formatData(rawData);
+                renderChart({
+                    labels,
+                    data
+                });
+            }
+
+            async function getData(filter = null) {
+                const res = await fetch(`https://insta.jarnobogaert.xyz/followers-history?f=${filter}`);
                 const json = await res.json();
                 return json
             }
@@ -154,28 +167,35 @@
                 }
             }
 
-            function renderCount({
-                amountOfFollowers
-            }, ...rest) {
+            function renderCount({ amountOfFollowers }) {
                 const countSpan = document.getElementById('count');
                 countSpan.innerText = amountOfFollowers;
             }
 
             (async () => {
-                const rawData = await getData()
-                const {
-                    labels,
-                    data
-                } = formatData(rawData);
+                // const rawData = await getData()
+                // const {
+                //     labels,
+                //     data
+                // } = formatData(rawData);
+
+                showData()
                 const latest = await getLatestCountData();
-                renderChart({
-                    labels,
-                    data
-                });
+
+                // renderChart({
+                //     labels,
+                //     data
+                // });
                 renderCount(latest);
 
                 showWrapper();
                 hideLoader();
+
+
+                // Event listeners
+                document.getElementById('dailyBtn').addEventListener('click', () => {
+                    showData('daily')
+                })
             })()
         }
     </script>
